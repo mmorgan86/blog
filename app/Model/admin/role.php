@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Model\admin;
 
 use Illuminate\Database\Eloquent\Model;
 
-class category_post extends Model
+class role extends Model
 {
     //
 }
