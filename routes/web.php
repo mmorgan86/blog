@@ -11,10 +11,30 @@
 |
 */
 
+use App\Http\Controllers\Admin\PostController;
+
 Route::get('/', function () {
-    return view('user/blog');
+    return view('user.blog');
 });
 
 Route::get('post', function() {
-   return view('user/post');
+   return view('user.post');
 })->name('post');
+
+Route::resource('admin/post', 'Admin\PostController');
+
+//Route::get('admin/home', function() {
+//    return view('admin.home');
+//});
+//
+//Route::get('admin/post', function() {
+//    return view('admin.post.post');
+//});
+//
+//Route::get('admin/tag', function() {
+//    return view('admin.tag.tag');
+//});
+//
+//Route::get('admin/category', function() {
+//    return view('admin.category.category');
+//});
