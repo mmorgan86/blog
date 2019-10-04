@@ -13,28 +13,23 @@
 
 use App\Http\Controllers\Admin\PostController;
 
-Route::get('/', function () {
-    return view('user.blog');
+// User Routes
+Route::group(['namespace' => 'User'], function() {
+    Route::get('/', 'HomeController@index');
+    Route::get('user/post', 'PostController@index')->name('post');
 });
 
-Route::get('post', function() {
-   return view('user.post');
-})->name('post');
+// Admin Routes
+Route::group(['namespace' => 'Admin'], function() {
+    Route::get('admin/home', 'HomeController@index')->name('admin.home');
+    // USERS ROUTES
+    Route::resource('admin/user', 'UserController');
+    // POST ROUTES
+    Route::resource('admin/post', 'PostController');
+    // TAG ROUTES
+    Route::resource('admin/tag', 'TagController');
+    // CATEGORY ROUTES
+    Route::resource('admin/category', 'CategoryController');
+});
 
-Route::resource('admin/post', 'Admin\PostController');
 
-//Route::get('admin/home', function() {
-//    return view('admin.home');
-//});
-//
-//Route::get('admin/post', function() {
-//    return view('admin.post.post');
-//});
-//
-//Route::get('admin/tag', function() {
-//    return view('admin.tag.tag');
-//});
-//
-//Route::get('admin/category', function() {
-//    return view('admin.category.category');
-//});
