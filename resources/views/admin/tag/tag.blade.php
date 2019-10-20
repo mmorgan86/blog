@@ -21,6 +21,8 @@
             <div class="row">
                 <div class="col-md-12">
 
+                    <!-- errors -->
+                    @include('includes.messages')
 
                     <!-- general form elements -->
                     <div class="box box-primary">
@@ -29,7 +31,8 @@
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
-                        <form role="form">
+                        <form role="form" action="{{ route('tag.store') }}" method="POST">
+                            @csrf
                             <div class="box-body">
 
                                 <div class="col-lg-offset-3 col-lg-6">
@@ -48,6 +51,7 @@
 
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary">Submit</button>
+                                        <a href="{{ route('tag.index') }}" class="btn btn-danger">Back</a>
                                     </div>
 
                                 </div>

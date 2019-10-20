@@ -3,10 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Model\User\Category;
+use App\Model\User\Post;
+use App\Model\User\Tag;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +26,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('admin.post.show');
+        $posts = Post::all();
+        return view('admin.post.show', compact('posts'));
     }
 
     /**
@@ -24,7 +37,10 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.post.post');
+        $tags = Tag::all();
+        $categories = Category::all();
+
+        return view('admin.post.post', compact('tags', 'categories'));
     }
 
     /**
@@ -35,7 +51,35 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validate = $this->validate($request, [
+            'title' => 'required',
+            'subtitle' => 'required',
+            'slug' => 'required',
+            'body' => 'required',
+//            'image' => 'required'
+        ]);
+
+
+        $post =  new Post;
+
+        if($request->hasFile('image')) {
+            $imageFile = $request->image->store('public/images/');
+            $post->image = $imageFile;
+
+        }
+
+        $post->title = $request->title;
+        $post->subtitle = $request->subtitle;
+        $post->slug = $request->slug;
+        $post->body = $request->body;
+        $post->status = $request->status;
+        $post->save();
+
+        $post->tags()->sync($request->tags);
+        $post->categories()->sync($request->categories);
+
+        return redirect(route('post.index'));
     }
 
     /**
@@ -57,7 +101,11 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Post::with('tags', 'categories')->where('id', $id)->first();
+        $tags = Tag::all();
+        $categories = Category::all();
+
+        return view('admin.post.edit', compact('post', 'tags', 'categories'));
     }
 
     /**
@@ -69,7 +117,38 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+
+        $validate = $this->validate($request, [
+            'title' => 'required',
+            'subtitle' => 'required',
+            'slug' => 'required',
+            'body' => 'required',
+//            'image' => 'required'
+        ]);
+
+        $post =  Post::find($id);
+
+        /*
+         * Get image and store it in public folder
+         */
+        if($request->hasFile('image')) {
+//            $request->image->getClientOriginalName();
+            $imageName = $request->image->store('public/images/');
+            $post->image = $imageName;
+        }
+
+        $post->title = $request->title;
+        $post->subtitle = $request->subtitle;
+        $post->slug = $request->slug;
+        $post->body = $request->body;
+        $post->status = $request->status;
+        $post->tags()->sync($request->tags);
+        $post->categories()->sync($request->categories);
+
+        $post->save();
+
+        return redirect(route('post.index'));
     }
 
     /**
@@ -80,6 +159,8 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $delete = Post::where('id', $id) ->delete();
+
+        return redirect()->back();
     }
 }

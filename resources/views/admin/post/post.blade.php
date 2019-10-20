@@ -1,12 +1,17 @@
 @extends('admin.layouts.app')
 
+@section('headSection')
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{{asset('../../admin/bower_components/select2/dist/css/select2.min.css')}}">
+@endsection
+
 @section('main-content')
 
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Text Editors
+                New Post
                 <small>Advanced form element</small>
             </h1>
             <ol class="breadcrumb">
@@ -28,8 +33,13 @@
                             <h3 class="box-title">Title</h3>
                         </div>
                         <!-- /.box-header -->
+
+                        <!-- errors -->
+                        @include('includes.messages')
+
                         <!-- form start -->
-                        <form role="form">
+                        <form role="form" action="{{ route('post.store') }}" method='POST' enctype="multipart/form-data">
+                            @csrf
                             <div class="box-body">
 
                                 <div class="col-lg-6">
@@ -56,20 +66,70 @@
 
                                 <div class="col-lg-6">
 
-                                    <div class="form-group">
-                                        <label for="image">File input</label>
-                                        <input type="file" id="image" name="image">
+                                    <br>
 
-                                        <p class="help-block">Example block-level help text here.</p>
+                                    <div class="form-group">
+                                        <div class="pull-left">
+                                            <label for="image">File input</label>
+                                            <input type="file" id="image" name="image">
+                                        </div>
+
+                                        <div class="checkbox pull-right">
+                                            <label style="font-weight: bold;font-size: 1.5rem;">
+                                                <input type="checkbox"
+                                                        name="status"
+                                                       value="1"
+                                                >
+                                                Publish?
+                                            </label>
+                                        </div>
                                     </div>
 
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="status"> Publish?
-                                        </label>
+                                    <br>
+                                    <br>
+
+                                    <div class="form-group">
+                                        <label>Select Tags</label>
+                                        <select class="form-control select2 select2-hidden-accessible" multiple=""
+                                                data-placeholder="Type here" style="width: 100%;" tabindex="-1"
+                                                aria-hidden="true"
+                                                name="tags[]"
+                                        >
+
+                                            @if($tags)
+                                                @foreach($tags as $tag)
+                                                    <option
+                                                            value="{{ $tag->id}}"
+                                                    >{{ $tag->name }}</option>
+                                                @endforeach
+                                            @endif
+
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Select Categories</label>
+                                        <select class="form-control select2 select2-hidden-accessible" multiple=""
+                                                data-placeholder="Type here" style="width: 100%;" tabindex="-1"
+                                                aria-hidden="true"
+                                                name="catorgies[]"
+                                        >
+
+                                                @if($categories)
+                                                    @foreach($categories as $category)
+                                                        <option
+                                                                value="{{ $category->id}}"
+                                                        >
+                                                            {{ $category->name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
+
+                                        </select>
                                     </div>
 
                                 </div>
+
                             </div>
                             <!-- /.box-body -->
 
@@ -88,17 +148,15 @@
                                 </div>
                                 <!-- /.box-header -->
                                 <div class="box-body pad">
-                                    <form>
-                                        <textarea class="textarea" name='body' id='body' placeholder="Speak your mind
-                                         here
-                                        ..."
-                          style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
-                                    </form>
+                                    <textarea name='body' id='editor1' placeholder="Speak your mind here..."
+                                              style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"
+                                    ></textarea>
                                 </div>
                             </div>
 
                             <div class="box-footer">
                                 <button type="submit" class="btn btn-primary">Submit</button>
+                                <a href="{{ route('post.index') }}" class="btn btn-danger">Back</a>
                             </div>
 
                         </form>
@@ -114,29 +172,42 @@
     </div>
     <!-- /.content-wrapper -->
 
-    <!-- jQuery 3 -->
-    <script src="{{ asset('../../admin/bower_components/jquery/dist/jquery.min.js')}}"></script>
-    <!-- Bootstrap 3.3.7 -->
-    <script src="{{ asset('../../admin/bower_components/bootstrap/dist/js/bootstrap.min.js')}}"></script>
-    <!-- FastClick -->
-    <script src="{{ asset('../../admin/bower_components/fastclick/lib/fastclick.js')}}"></script>
-    <!-- AdminLTE App -->
-    <script src="{{ asset('../../admin/dist/js/adminlte.min.js')}}"></script>
-    <!-- AdminLTE for demo purposes -->
-    <script src="{{ asset('../../admin/dist/js/demo.js')}}"></script>
+  @endsection
+
+@section('footerSection')
+    <!-- Select2 -->
+    <script src="{{asset('../../admin/bower_components/select2/dist/js/select2.full.min.js')}}"></script>
+    <script>
+        $(document).ready(function() {
+            //Initialize Select2 Elements
+            $('.select2').select2();
+        });
+    </script>
+
     <!-- CK Editor -->
-    <script src="{{ asset('../../admin/bower_components/ckeditor/ckeditor.js')}}"></script>
-    <!-- Bootstrap WYSIHTML5 -->
-    <script src="{{ asset('../../admin/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js"></script>
+
+    {{--<!-- Bootstrap WYSIHTML5 -->--}}
+    {{--<script src="{{ asset('../../admin/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js')}}"></script>--}}
 
     <script>
         $(function () {
             // Replace the <textarea id="editor1"> with a CKEditor
             // instance, using default configuration.
-            CKEDITOR.replace('body');
+            // CKEDITOR.replace('editor1');
             //bootstrap WYSIHTML5 - text editor
-            $('.textarea').wysihtml5();
-        })
-    </script>
+            // $('.textarea').wysihtml5();
 
-  @endsection
+        });
+
+        ClassicEditor
+            .create( document.querySelector( '#editor1' ) )
+            .then( editor => {
+                console.log( 'Editor was initialized', editor );
+            } )
+            .catch( error => {
+                console.error( error.stack );
+            } );
+
+    </script>
+@endsection
