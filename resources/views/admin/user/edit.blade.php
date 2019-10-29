@@ -6,7 +6,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Create New Admin
+                Edit {{ $user->name }}
                 <small>New Person</small>
             </h1>
             <ol class="breadcrumb">
@@ -31,8 +31,9 @@
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
-                        <form role="form" action="{{ route('user.store') }}" method="POST">
+                        <form role="form" action="{{ route('user.update', $user->id) }}" method="POST">
                             @csrf
+                            @method('PATCH')
                             <div class="box-body">
 
                                 <div class="col-lg-offset-3 col-lg-6">
@@ -41,7 +42,7 @@
                                         <label for="name">Name</label>
                                         <input type="text" class="form-control" id="name" name='name'
                                                placeholder="Enter Name"
-                                               value="{{ old('name') }}"
+                                               value="@if(old('name')){{ old('name') }}@else{{ $user->name }}@endif"
                                         >
                                     </div>
 
@@ -49,7 +50,7 @@
                                         <label for="email">Email</label>
                                         <input type="email" class="form-control" id="email" name="email"
                                                placeholder="Enter Email"
-                                               value="{{ old('email') }}"
+                                               value="@if(old('email')){{ old('email') }}@else{{ $user->email }}@endif"
                                         >
 
                                     </div>
@@ -58,23 +59,23 @@
                                         <label for="phone">Phone</label>
                                         <input type="text" class="form-control" id="phone" name="phone"
                                                placeholder="Enter Phone Number"
-                                               value="{{ old('phone') }}"
+                                               value="@if(old('phone')){{ old('phone') }}@else{{ $user->phone }}@endif"
                                         >
                                     </div>
 
 
-                                    <div class="form-group">
-                                        <label for="password">Password</label>
-                                        <input type="password" class="form-control" id="password" name="password"
-                                               placeholder="Enter Password">
-                                    </div>
+{{--                                    <div class="form-group">--}}
+{{--                                        <label for="password">Password</label>--}}
+{{--                                        <input type="password" class="form-control" id="password" name="password"--}}
+{{--                                               placeholder="Enter Password">--}}
+{{--                                    </div>--}}
 
-                                    <div class="form-group">
-                                        <label for="password_confirmation">Confirm Password</label>
-                                        <input type="password" class="form-control" id="password_confirmation"
-                                               name="password_confirmation"
-                                               placeholder="Re-enter Password">
-                                    </div>
+{{--                                    <div class="form-group">--}}
+{{--                                        <label for="password_confirmation">Confirm Password</label>--}}
+{{--                                        <input type="password" class="form-control" id="password_confirmation"--}}
+{{--                                               name="password_confirmation"--}}
+{{--                                               placeholder="Re-enter Password">--}}
+{{--                                    </div>--}}
 
                                     <div class="form-group">
                                         <label for="status">Status</label>
@@ -82,10 +83,11 @@
                                             <label for="checkbox">
                                                 <input type="checkbox"
                                                        name="status"
-                                                       @if(old('status') == 1)
-                                                           checked
-                                                       @endif
-                                                    value="1"
+                                                       value="1"
+
+                                                       @if(old('status') == 1 || $user->status == 1)
+                                                                checked
+                                                            @endif
                                                 >
                                                 Status
                                             </label>

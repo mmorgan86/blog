@@ -3,10 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Model\admin\admin;
+use App\Model\admin\Role;
+use App\Model\User\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:admin');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +26,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('admin.user.show');
+        $users = admin::all();
+        return view('admin.user.show', compact('users'));
     }
 
     /**
@@ -24,7 +37,8 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('admin.user.create');
+        $roles = Role::all();
+        return view('admin.user.create', compact('roles'));
     }
 
     /**
@@ -35,7 +49,17 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validate = $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:admins',
+            'phone' => 'required|numeric',
+            'password' => 'required|string|min:6|confirmed'
+        ]);
+
+        $request['password'] = bcrypt($request->password);
+        $user = admin::create($request->all());
+        $user->role()->sync($request->role);
+        return redirect(route('user.index'));
     }
 
     /**
@@ -57,7 +81,10 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = admin::find($id);
+        $roles = Role::all();
+
+        return view('admin.user.edit', compact('user', 'roles'));
     }
 
     /**
@@ -69,7 +96,15 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validate = $this->validate($request,[
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'phone' => 'required|numeric',
+//            'password' => 'required|string|min:6|confirmed'
+        ]);
+        $user = admin::where('id', $id)->update($request->except('_token', '_method'));
+
+        return redirect(route('user.index'))->with('message', 'User updated successfully');
     }
 
     /**
@@ -80,6 +115,7 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = admin::where('id', $id)->delete();
+        return redirect()->back()->with('message', 'User is deleted successfully!');
     }
 }

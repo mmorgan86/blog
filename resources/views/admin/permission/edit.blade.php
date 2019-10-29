@@ -6,8 +6,8 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Edit {{ $tag->name }}
-                <small>Advanced form element</small>
+                Edit {{ $permission->name }}
+                <small>Permission</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -27,11 +27,11 @@
                 <!-- general form elements -->
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Tags</h3>
+                            <h3 class="box-title">Permission</h3>
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
-                        <form role="form" action="{{ route('tag.update', $tag->id) }}" method="POST">
+                        <form role="form" action="{{ route('permission.update', $permission->id) }}" method="POST">
                             @csrf
                             @method('PATCH')
                             <div class="box-body">
@@ -39,24 +39,16 @@
                                 <div class="col-lg-offset-3 col-lg-6">
 
                                     <div class="form-group">
-                                        <label for="name">Tag Title</label>
+                                        <label for="name">Permission Name</label>
                                         <input type="text" class="form-control" id="name" name='name'
-                                               placeholder="Enter Tag"
-                                                value="{{ $tag->name }}"
-                                        >
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label for="slug">Tag Slug</label>
-                                        <input type="text" class="form-control" id="slug" name="slug"
-                                               placeholder="Enter Slug"
-                                               value="{{ $tag->slug }}"
+                                               placeholder="Enter Permission"
+                                                value="{{ $permission->name }}"
                                         >
                                     </div>
 
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-primary">Update</button>
-                                        <a href="{{ route('tag.index') }}" class="btn btn-danger">Back</a>
+                                        <a href="{{ route('permission.index') }}" class="btn btn-danger">Back</a>
                                     </div>
 
                                 </div>

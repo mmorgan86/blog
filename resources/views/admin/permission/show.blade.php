@@ -12,8 +12,8 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Tags Page
-                <small>it all starts here</small>
+                Permissions
+                <small></small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
@@ -29,10 +29,10 @@
             <div class="box">
                 <div class="box-header with-border">
 
-                    <h3 class="box-title">Tags</h3>
+                    <h3 class="box-title">Permissions</h3>
 
-                    <a href="{{ route('tag.create') }}"
-                       class="btn btn-success col-lg-offset-5">Add New</a>
+                    <a href="{{ route('permission.create') }}"
+                       class="btn btn-success col-lg-offset-5">Add New Permission</a>
 
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -45,7 +45,10 @@
                 <div class="box-body">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">Data Table With Full Features</h3>
+                            <h3 class="box-title"></h3>
+
+                            @include('includes.messages')
+
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -53,30 +56,28 @@
                                 <thead>
                                 <tr>
                                     <th>Serial.No</th>
-                                    <th>Tag Name</th>
-                                    <th>Slug</th>
+                                    <th>Permission Name</th>
+                                    <th>Permission For</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
-                                        @forelse($tags->all() as $tag)
+                                        @forelse($permissions as $permission)
                                             <tr>
-                                                <td>{{ $tag->id }}</td>
+                                                <td>{{ $permission->id }}</td>
+                                                <td>{{ $permission->name }}</td>
+                                                <th>{{ $permission->for  }}</th>
                                                 <td>
-                                                    <a href="{{ route('tag', $tag->slug) }}">{{ $tag->name }}</a>
-                                                </td>
-                                                <td>{{ $tag->slug }}</td>
-                                                <td>
-                                                    <a href="{{ route('tag.edit', $tag->id) }}">
+                                                    <a href="{{ route('permission.edit', $permission->id) }}">
                                                         <i class="fa fa-pencil-square-o fa-lg"aria-hidden="true"></i>
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <form action="{{ route('tag.destroy', $tag->id) }}"
+                                                    <form action="{{ route('permission.destroy', $permission->id) }}"
                                                           method="POST"
-                                                          id="delete-tag-{{ $tag->id }}"
+                                                          id="delete-permission-{{ $permission->id }}"
                                                     >
                                                         @csrf
                                                         @method('DELETE')
@@ -85,7 +86,7 @@
                                                         onclick="if(confirm('Are you sure, You want to delete this?'))
                                                         {
                                                             event.preventDefault();
-                                                            document.getElementById('delete-tag-{{ $tag->id }}')
+                                                            document.getElementById('delete-permission-{{ $permission->id }}')
                                                             .submit();
                                                         } else {
                                                             event.preventDefault();
@@ -104,11 +105,11 @@
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <td>Serial.No</td>
-                                    <td>Tag Name</td>
-                                    <td>Slug</td>
-                                    <td>Edit</td>
-                                    <td>Delete</td>
+                                    <th>Serial.No</th>
+                                    <th>Permission Name
+                                    <th>Permission For</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
                                 </tr>
                                 </tfoot>
                             </table>

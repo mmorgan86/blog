@@ -12,7 +12,7 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Tags Page
+                Roles
                 <small>it all starts here</small>
             </h1>
             <ol class="breadcrumb">
@@ -29,9 +29,9 @@
             <div class="box">
                 <div class="box-header with-border">
 
-                    <h3 class="box-title">Tags</h3>
+                    <h3 class="box-title">Roles</h3>
 
-                    <a href="{{ route('tag.create') }}"
+                    <a href="{{ route('role.create') }}"
                        class="btn btn-success col-lg-offset-5">Add New</a>
 
                     <div class="box-tools pull-right">
@@ -45,7 +45,7 @@
                 <div class="box-body">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">Data Table With Full Features</h3>
+                            <h3 class="box-title"></h3>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -53,30 +53,26 @@
                                 <thead>
                                 <tr>
                                     <th>Serial.No</th>
-                                    <th>Tag Name</th>
-                                    <th>Slug</th>
+                                    <th>Role Name</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
-                                        @forelse($tags->all() as $tag)
+                                        @forelse($roles as $role)
                                             <tr>
-                                                <td>{{ $tag->id }}</td>
+                                                <td>{{ $role->id }}</td>
+                                                <td>{{ $role->name }}</td>
                                                 <td>
-                                                    <a href="{{ route('tag', $tag->slug) }}">{{ $tag->name }}</a>
-                                                </td>
-                                                <td>{{ $tag->slug }}</td>
-                                                <td>
-                                                    <a href="{{ route('tag.edit', $tag->id) }}">
+                                                    <a href="{{ route('role.edit', $role->id) }}">
                                                         <i class="fa fa-pencil-square-o fa-lg"aria-hidden="true"></i>
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <form action="{{ route('tag.destroy', $tag->id) }}"
+                                                    <form action="{{ route('role.destroy', $role->id) }}"
                                                           method="POST"
-                                                          id="delete-tag-{{ $tag->id }}"
+                                                          id="delete-role-{{ $role->id }}"
                                                     >
                                                         @csrf
                                                         @method('DELETE')
@@ -85,7 +81,7 @@
                                                         onclick="if(confirm('Are you sure, You want to delete this?'))
                                                         {
                                                             event.preventDefault();
-                                                            document.getElementById('delete-tag-{{ $tag->id }}')
+                                                            document.getElementById('delete-role-{{ $role->id }}')
                                                             .submit();
                                                         } else {
                                                             event.preventDefault();
@@ -104,11 +100,10 @@
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <td>Serial.No</td>
-                                    <td>Tag Name</td>
-                                    <td>Slug</td>
-                                    <td>Edit</td>
-                                    <td>Delete</td>
+                                    <th>Serial.No</th>
+                                    <th>Role Name</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
                                 </tr>
                                 </tfoot>
                             </table>

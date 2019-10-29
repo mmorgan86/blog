@@ -28,10 +28,10 @@
             <!-- Default box -->
             <div class="box">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Title</h3>
+                    <h3 class="box-title">Posts</h3>
 
                     <a href="{{ route('post.create') }}"
-                       class="btn btn-success col-lg-offset-5">Add New</a>
+                       class="btn btn-success col-lg-offset-5">Add New Post</a>
 
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse" data-toggle="tooltip"
@@ -43,7 +43,7 @@
                 </div>
                 <div class="box">
                     <div class="box-header">
-                        <h3 class="box-title">Data Table With Full Features</h3>
+                        <h3 class="box-title">Post</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">

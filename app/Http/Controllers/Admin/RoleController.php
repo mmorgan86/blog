@@ -3,20 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Model\User\Category;
+use App\Model\Admin\Permission;
+use App\Model\admin\Role;
 use Illuminate\Http\Request;
 
-class CategoryController extends Controller
+class RoleController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:admin');
-    }
     /**
      * Display a listing of the resource.
      *
@@ -24,8 +16,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-        return view('admin.category.show', compact('categories'));
+        $roles = Role::all();
+        return view('admin.role.show', compact('roles'));
     }
 
     /**
@@ -35,7 +27,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('admin/category/category');
+        $permissions = Permission::all();
+        return view('admin.role.create', compact('permissions'));
     }
 
     /**
@@ -46,17 +39,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $validation = $this->validate($request, [
-            'name' => 'required',
-            'slug' => 'required'
+        $validate = $this->validate($request, [
+           'name' => 'required|max:50|unique:roles'
         ]);
 
-        $category = new category;
-        $category->name = $request->name;
-        $category->slug = $request->slug;
-        $category->save();
+        $role = new Role;
+        $role->name = $request->name;
+        $role->save();
 
-        return redirect(route('category.index'));
+        return redirect(route('role.index'));
     }
 
     /**
@@ -78,8 +69,9 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $category = Category::where('id', $id)->first();
-        return view('admin.category.edit', compact('category'));
+        $role = Role::find($id);
+        $permissions = Permission::all();
+        return view('admin.role.edit', compact('role', 'permissions'));
     }
 
     /**
@@ -92,16 +84,16 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $validate = $this->validate($request, [
-            'name' => 'required',
-            'slug' => 'required'
+            'name' => 'required|max:50'
         ]);
 
-        $category = Category::find($id);
-        $category->name = $request->name;
-        $category->slug = $request->slug;
-        $category->save();
+        $role = Role::find($id);
+        $role->name = $request->name;
+        $role->save();
 
-        return redirect(route('category.index'));
+        $role->permissions()->sync($request->permission);
+
+        return redirect(route('role.index'));
     }
 
     /**
@@ -112,7 +104,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $delete = Category::where('id',$id)->delete();
+        $delete = Role::where('id', $id)->delete();
         return redirect()->back();
     }
 }
